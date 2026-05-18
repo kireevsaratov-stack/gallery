@@ -1,0 +1,25 @@
+{% extends 'gallery/base.html' %}
+
+{% block content %}
+<div class="albums-grid">
+    {% for item in categories_with_preview %}
+    <a href="{% url 'category_detail' item.category.slug %}" class="album-card" style="display: block; text-decoration: none;">
+        {% if item.preview_photos %}
+        <img src="{{ item.preview_photos.0.image.url }}" alt="{{ item.category.name }}" loading="lazy">
+        {% else %}
+        <div class="placeholder-bg">
+            <span>{{ item.category.name }}</span>
+        </div>
+        {% endif %}
+        <div class="caption">
+            <h3>{{ item.category.name }}</h3>
+            <div class="count">{{ item.total_count }} фото</div>
+        </div>
+    </a>
+    {% empty %}
+    <p style="grid-column: 1/-1; text-align: center; padding: 100px 0; color: var(--text-muted);">
+        Нет категорий. <a href="/admin/" style="color: var(--text-muted);">Добавьте категории в админке</a>.
+    </p>
+    {% endfor %}
+</div>
+{% endblock %}

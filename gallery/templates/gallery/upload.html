@@ -1,0 +1,94 @@
+{% extends 'gallery/base.html' %}
+{% block body_class %}theme-raw{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4">📤 Массовая загрузка фото</h2>
+
+    {% if success %}
+    <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" id="upload-form">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Выбери категорию</label>
+            <select name="category" id="category" class="form-select" required>
+                <option value="">— выбери —</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="tags" class="form-label">Существующие теги</label>
+            <select name="tags" id="tags" class="form-select" multiple>
+                {% for tag in tags %}
+                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+            <small class="text-muted">Зажми Cmd чтобы выбрать несколько</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_tags" class="form-label">Новые теги (через запятую)</label>
+            <input type="text" name="new_tags" id="new_tags" class="form-control"
+                   placeholder="Свадьба, Концерт, Спорт">
+            <small class="text-muted">Впиши новые теги через запятую — они создадутся автоматически</small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Выбери фото (можно сразу много)</label>
+            <div id="drop-zone" style="border: 2px dashed #ccc; border-radius: 12px; padding: 40px 20px;
+                 text-align: center; cursor: pointer; transition: border-color 0.3s; background: #fafafa;">
+                <p class="mb-2">📁 Перетащи фото сюда</p>
+                <p class="text-muted small mb-0">или нажми, чтобы выбрать</p>
+                <input type="file" name="images" id="images" class="d-none"
+                       accept="image/*" multiple required>
+            </div>
+            <div id="file-list" class="mt-2 small text-muted"></div>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100">Загрузить</button>
+    </form>
+
+    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary mt-3">← В админку</a>
+</div>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('images');
+    const fileList = document.getElementById('file-list');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#000';
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#ccc';
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#ccc';
+        fileInput.files = e.dataTransfer.files;
+        updateFileList(Array.from(e.dataTransfer.files));
+    });
+
+    fileInput.addEventListener('change', () => {
+        updateFileList(Array.from(fileInput.files));
+    });
+
+    function updateFileList(files) {
+        if (files.length === 0) {
+            fileList.textContent = '';
+        } else {
+            fileList.textContent = 'Выбрано ' + files.length + ' файлов: '
+                + files.map(f => f.name).join(', ');
+        }
+    }
+</script>
+{% endblock %}

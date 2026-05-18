@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts: Oswald + Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.6);
+            --border: rgba(255,255,255,0.12);
+            --hover: rgba(255,255,255,0.04);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+            margin: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: var(--text);
+        }
+
+        /* Навигация */
+        .navbar {
+            background-color: var(--bg) !important;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .nav-link {
+            color: var(--text-muted) !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 8px 20px;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+        .navbar .nav-link:hover {
+            color: var(--text) !important;
+        }
+        .navbar .nav-link.active {
+            color: var(--text) !important;
+        }
+
+        /* Главная страница — сетка альбомов */
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            padding: 4px;
+        }
+        @media (max-width: 768px) {
+            .albums-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .albums-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .album-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 0.8;
+        }
+        .album-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .album-card:hover img {
+            transform: scale(1.05);
+        }
+        .album-card .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+        }
+        .album-card .caption h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0;
+            color: #fff;
+        }
+        .album-card .caption .count {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+        }
+
+        /* Заглушка для пустых категорий */
+        .album-card .placeholder-bg {
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .album-card .placeholder-bg span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+        }
+
+        /* Страница категории */
+        .category-header {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+        .category-header h1 {
+            font-size: 48px;
+            letter-spacing: 0.03em;
+            margin-bottom: 8px;
+        }
+        .category-header .count {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+        }
+        @media (max-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .photo-grid .photo-item {
+            cursor: pointer;
+            overflow: hidden;
+            aspect-ratio: 0.8;
+        }
+        .photo-grid .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .photo-grid .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .breadcrumb li {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .breadcrumb li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .breadcrumb li a:hover {
+            color: var(--text);
+        }
+        .breadcrumb li + li::before {
+            content: "→";
+            margin-right: 8px;
+            color: var(--text-muted);
+        }
+
+        /* Подвал */
+        footer {
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+        }
+        footer .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+        footer .social-links a {
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+        footer .social-links a:hover {
+            color: var(--text);
+        }
+        footer .copyright {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Лайтбокс */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            cursor: pointer;
+        }
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+        .lightbox .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 36px;
+            cursor: pointer;
+            z-index: 10;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            line-height: 1;
+        }
+        .lightbox .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 48px;
+            cursor: pointer;
+            z-index: 10;
+            padding: 20px;
+            transition: color 0.3s;
+            user-select: none;
+        }
+        .lightbox .nav-arrow:hover {
+            color: #fff;
+        }
+        .lightbox .nav-arrow.prev {
+            left: 0;
+        }
+        .lightbox .nav-arrow.next {
+            right: 0;
+        }
+        .lightbox .counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.5);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+        }
+
+        /* Анимация появления */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Главная</a>
+            <div style="margin-left: auto; display: flex;">
+                {% if user.is_staff %}
+                <a class="nav-link" href="{% url 'bulk_upload' %}">Загрузить</a>
+                <a class="nav-link" href="/admin/">Админка</a>
+                {% endif %}
+                <a class="nav-link" href="https://vk.com/kireevromanyurevich" target="_blank">VK</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Контент -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://vk.com/kireevromanyurevich" target="_blank">VK</a>
+                <a href="https://t.me/RomanFromKharabali" target="_blank">Telegram</a>
+            </div>
+            <div class="copyright">
+                Я искренне люблю фотографию, поэтому пока не готов её продавать<br>
+                © {% now "Y" %} Галерея
+            </div>
+        </div>
+    </footer>
+
+    <!-- Лайтбокс -->
+    <div class="lightbox" id="lightbox">
+        <span class="close" id="lightbox-close">&times;</span>
+        <span class="nav-arrow prev" id="lightbox-prev">‹</span>
+        <img id="lightbox-img" src="" alt="">
+        <span class="nav-arrow next" id="lightbox-next">›</span>
+        <span class="counter" id="lightbox-counter"></span>
+    </div>
+
+    <script>
+        // Лайтбокс со стрелками
+        (function() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxClose = document.getElementById('lightbox-close');
+            const lightboxPrev = document.getElementById('lightbox-prev');
+            const lightboxNext = document.getElementById('lightbox-next');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+
+            let currentPhotos = [];
+            let currentIndex = 0;
+
+            function openLightbox(photos, index) {
+                currentPhotos = photos;
+                currentIndex = index;
+                showPhoto();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function showPhoto() {
+                if (currentPhotos.length === 0) return;
+                lightboxImg.src = currentPhotos[currentIndex].src;
+                lightboxCounter.textContent = (currentIndex + 1) + ' / ' + currentPhotos.length;
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function nextPhoto() {
+                if (currentPhotos.length === 0) return;
+                currentIndex = (currentIndex + 1) % currentPhotos.length;
+                showPhoto();
+            }
+
+            function prevPhoto() {
+                if (currentPhotos.length === 0) return;
+                currentIndex = (currentIndex - 1 + currentPhotos.length) % currentPhotos.length;
+                showPhoto();
+            }
+
+            // Привязка к фото на странице категории
+            document.addEventListener('click', function(e) {
+                const photoItem = e.target.closest('.photo-item');
+                if (!photoItem) return;
+                const allPhotos = Array.from(document.querySelectorAll('.photo-grid .photo-item img'));
+                const index = allPhotos.indexOf(photoItem.querySelector('img'));
+                if (index >= 0) {
+                    openLightbox(allPhotos, index);
+                }
+            });
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightboxNext.addEventListener('click', function(e) { e.stopPropagation(); nextPhoto(); });
+            lightboxPrev.addEventListener('click', function(e) { e.stopPropagation(); prevPhoto(); });
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) closeLightbox();
+            });
+
+            // Клавиатура
+            document.addEventListener('keydown', function(e) {
+                if (!lightbox.classList.contains('active')) return;
+                if (e.key === 'ArrowRight') nextPhoto();
+                if (e.key === 'ArrowLeft') prevPhoto();
+                if (e.key === 'Escape') closeLightbox();
+            });
+        })();
+
+        // Анимация появления при скролле
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.album-card, .photo-item').forEach(function(el) {
+            el.classList.add('animate-in');
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
