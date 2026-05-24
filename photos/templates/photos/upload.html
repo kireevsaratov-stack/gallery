@@ -1,5 +1,4 @@
-{% extends 'gallery/base.html' %}
-{% block body_class %}theme-raw{% endblock %}
+{% extends 'photos/base.html' %}
 
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
@@ -9,7 +8,7 @@
     <div class="alert alert-success">{{ success }}</div>
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data" id="upload-form">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-3">
@@ -23,38 +22,33 @@
         </div>
 
         <div class="mb-3">
-            <label for="tags" class="form-label">Существующие теги</label>
-            <select name="tags" id="tags" class="form-select" multiple>
-                {% for tag in tags %}
-                <option value="{{ tag.id }}">{{ tag.name }}</option>
+            <label for="subcategory" class="form-label">Подкатегория (необязательно)</label>
+            <select name="subcategory" id="subcategory" class="form-select">
+                <option value="">— без подкатегории —</option>
+                {% for cat in categories %}
+                {% for sub in cat.subcategories.all %}
+                <option value="{{ sub.id }}">{{ cat.name }} → {{ sub.name }}</option>
+                {% endfor %}
                 {% endfor %}
             </select>
-            <small class="text-muted">Зажми Cmd чтобы выбрать несколько</small>
-        </div>
-
-        <div class="mb-3">
-            <label for="new_tags" class="form-label">Новые теги (через запятую)</label>
-            <input type="text" name="new_tags" id="new_tags" class="form-control"
-                   placeholder="Свадьба, Концерт, Спорт">
-            <small class="text-muted">Впиши новые теги через запятую — они создадутся автоматически</small>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Выбери фото (можно сразу много)</label>
-            <div id="drop-zone" style="border: 2px dashed #ccc; border-radius: 12px; padding: 40px 20px;
-                 text-align: center; cursor: pointer; transition: border-color 0.3s; background: #fafafa;">
-                <p class="mb-2">📁 Перетащи фото сюда</p>
-                <p class="text-muted small mb-0">или нажми, чтобы выбрать</p>
+            <div id="drop-zone" style="border: 2px dashed #555; border-radius: 12px; padding: 40px 20px;
+                 text-align: center; cursor: pointer; transition: border-color 0.3s; background: #111;">
+                <p class="mb-2" style="color: #aaa;">📁 Перетащи фото сюда</p>
+                <p class="small mb-0" style="color: #666;">или нажми, чтобы выбрать</p>
                 <input type="file" name="images" id="images" class="d-none"
                        accept="image/*" multiple required>
             </div>
-            <div id="file-list" class="mt-2 small text-muted"></div>
+            <div id="file-list" class="mt-2 small" style="color: #666;"></div>
         </div>
 
-        <button type="submit" class="btn btn-dark w-100">Загрузить</button>
+        <button type="submit" class="btn btn-light w-100">Загрузить</button>
     </form>
 
-    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary mt-3">← В админку</a>
+    <a href="{% url 'admin:index' %}" class="btn btn-outline-light mt-3">← В админку</a>
 </div>
 
 <script>
@@ -66,14 +60,14 @@
 
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropZone.style.borderColor = '#000';
+        dropZone.style.borderColor = '#fff';
     });
     dropZone.addEventListener('dragleave', () => {
-        dropZone.style.borderColor = '#ccc';
+        dropZone.style.borderColor = '#555';
     });
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropZone.style.borderColor = '#ccc';
+        dropZone.style.borderColor = '#555';
         fileInput.files = e.dataTransfer.files;
         updateFileList(Array.from(e.dataTransfer.files));
     });

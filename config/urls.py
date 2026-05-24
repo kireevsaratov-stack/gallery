@@ -6,8 +6,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('gallery/', include('gallery.urls')),
-    path('', RedirectView.as_view(url='/gallery/', permanent=False)),
+    path('photos/', include('photos.urls')),
+    path('', RedirectView.as_view(url='/photos/', permanent=False)),
 ]
 
 if settings.DEBUG:

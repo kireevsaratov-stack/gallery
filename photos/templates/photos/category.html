@@ -1,0 +1,64 @@
+{% extends 'photos/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="category-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            <li>{{ category.name }}</li>
+        </ul>
+        <h1>{{ category.name }}</h1>
+    </div>
+</div>
+
+{% if subcats_with_photos %}
+<div class="container" style="margin-bottom: 30px; text-align: center;">
+    {% for subcat in subcats_with_photos %}
+    <a href="#subcat-{{ forloop.counter }}" style="display: inline-block; padding: 8px 20px; margin: 4px;
+         border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; color: var(--text-muted);
+         text-decoration: none; font-family: 'Inter', sans-serif; font-size: 14px; transition: all 0.3s;">
+        {{ subcat.name }}
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if subcats_with_photos %}
+    {% for subcat in subcats_with_photos %}
+    <div id="subcat-{{ forloop.counter }}" class="container" style="margin-bottom: 50px; scroll-margin-top: 80px;">
+        <h3 style="font-family: 'Oswald', sans-serif; font-size: 28px; margin-bottom: 16px; padding-left: 4px;">
+            {{ subcat.name }}
+            <small style="font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-muted);">
+                ({{ subcat.photos|length }} фото)
+            </small>
+        </h3>
+        <div class="photo-grid">
+            {% for photo in subcat.photos %}
+            <div class="photo-item">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+
+{% if untagged_photos %}
+<div class="container" style="margin-bottom: 50px;">
+    <h3 style="font-family: 'Oswald', sans-serif; font-size: 28px; margin-bottom: 16px; padding-left: 4px;">Остальное</h3>
+    <div class="photo-grid">
+        {% for photo in untagged_photos %}
+        <div class="photo-item">
+            <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if not subcats_with_photos and not untagged_photos %}
+<p style="text-align: center; padding: 60px 0; color: var(--text-muted);">
+    В этой категории пока нет фото.
+</p>
+{% endif %}
+{% endblock %}
