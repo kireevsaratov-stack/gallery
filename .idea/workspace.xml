@@ -5,33 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8288897d-9e22-4ab1-868f-022d1b7afaf8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/photo_portfolio.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/migrations/0002_category_style.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/migrations/0003_tag_photo_tags.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/templates/gallery/base.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/templates/gallery/category.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/templates/gallery/home.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/templates/gallery/upload.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gallery/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/admin/js/multi_upload.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/themes.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/upload.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
